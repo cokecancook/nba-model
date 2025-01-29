@@ -1,0 +1,474 @@
+/* Custom font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/***************/
+/* Base styles */
+/***************/
+:root {
+    --primary: #2c2a82;
+    --secondary: #00b4d8;
+    --red-nba: #e30613;
+    --dark: #0a0a0a;
+    --light: #ffffffcc;
+    --dark-bg: #061d2d;
+
+    --main-font: "Roboto Flex", serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--main-font)!important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+/* Body */
+body {
+    color: var(--light);
+    overflow-x: hidden;
+}
+
+/* Markdown headers */
+.stMarkdown h1 a, .stMarkdown h2 a, .stMarkdown h3 a, 
+.stMarkdown h4 a, .stMarkdown h5 a, .stMarkdown h6 a,
+.stHeading h1 a, .stHeading h2 a, .stHeading h3 a, 
+.stHeading h4 a, .stHeading h5 a, .stHeading h6 a {
+    pointer-events: none;  /* Disable click events */
+    text-decoration: none;  /* Remove underline */
+    color: inherit;  /* Keep the original text color */
+}
+
+.stMarkdown h1 span, .stMarkdown h2 span, .stMarkdown h3 span, 
+.stMarkdown h4 span, .stMarkdown h5 span, .stMarkdown h6 span,
+.stHeading h1 span, .stHeading h2 span, .stHeading h3 span, 
+.stHeading h4 span, .stHeading h5 span, .stHeading h6 span {
+    display: none;  /* Completely hide the span element */
+}
+
+.stHeading {
+    text-align: center;
+}
+
+/***************/
+/*    Header   */
+/***************/
+.stAppHeader {
+    background: transparent;
+}
+
+/***************/
+/*   Toolbar   */
+/***************/
+.stAppToolbar {
+    display: none;
+}
+
+/***************/
+/*   Sidebar   */
+/***************/
+.stSidebar {
+    background-color: hsla(204.8780487804878, 77%, 3%, 1);
+    width: 200px!important;
+    height: 100vh!important;
+}
+
+/* Sidebar border: disable pointer */
+[data-testid="stSidebarContent"] + div > div > div {
+    cursor: auto;
+}
+
+/* Sidebar border: hide */
+[data-testid="stSidebarContent"] + div > div > div:hover {
+    background-image: none;
+}
+
+/* Sidebar: hide collapse button */
+[data-testid="stSidebarCollapseButton"] {
+    display: none;
+}
+
+/* Menu */
+.stSidebar div[role="radiogroup"] label {
+    display: flex;
+    gap: 8px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 10px 10px;
+    border: 1.5px solid transparent !important;
+    border-radius: 8px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.stSidebar div[role="radiogroup"] label:hover {
+    background-color: rgba(33, 50, 106, 0.387);
+    border: 1.5px solid var(--secondary) !important;
+}
+
+.stSidebar div[role="radiogroup"] p {
+    font-weight: 200!important;
+    font-size: 1.3rem!important;
+}
+
+/* Footer */
+.sidebar-footer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: left;
+    margin-top: 2rem;
+    padding: 1rem 1rem 2rem 1rem;
+    font-weight: 200;
+    opacity: 0;
+    animation: fadeIn 1s ease 1s forwards;
+}
+
+.sidebar-footer-subheading {
+    padding-bottom: 0.5rem;
+    font-size: 1.1rem!important;
+    font-weight: 700!important;
+    color: var(--primary);
+}
+
+.sidebar-footer p {
+    margin-bottom: -0.2rem;
+    font-weight: 100;
+    letter-spacing: 1px;
+}
+
+.sidebar-footer p a {
+    text-decoration: none!important;
+    color: var(--light);
+    opacity: 0.8;
+}
+
+.sidebar-footer p a:hover {
+    opacity: 1;
+}
+
+/***************/
+/*     Main    */
+/***************/
+/* Main: background */
+.stMain {
+    background-color: var(--dark-bg);
+    background-image: 
+        radial-gradient(circle at 87% 90%, var(--dark) 0%, transparent 69%),
+        radial-gradient(circle at 39% 88%, var(--dark) 6%, transparent 79%),
+        radial-gradient(circle at 92% 65%, var(--dark) 6%, transparent 79%);
+    background-blend-mode: normal, normal, normal;
+}
+
+.stMainBlockContainer {
+    padding: 1rem 1rem 4rem!important;
+}
+
+/* Hero section */
+.hero {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+    position: relative;
+}
+
+/* NBA logo */
+.hero img {
+    width: 100px;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+/* Title */
+h1 {
+    letter-spacing: -0.5px;
+    font-size: 5rem!important;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary), var(--secondary))!important;
+    -webkit-background-clip: text!important;
+    background-clip: text!important;
+    color: transparent!important;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    animation: fadeInUp 1s ease;
+}
+
+/*h2 {
+    color: var(--light)!important;
+    letter-spacing: -0.5px;
+}*/
+
+/* Subtitle */
+.subheading {
+    font-size: 1.5rem;
+    font-weight: 100!important;
+    letter-spacing: 0.5px;
+    color: var(--light);
+    animation: fadeInUp 1s ease 0.2s forwards;
+    opacity: 0;
+}
+
+/* Cards */
+.content-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 4rem 2rem;
+    animation: fadeInUp 1s ease 0.4s forwards;
+    opacity: 0;
+}
+
+.card {
+    background: #ffffff0d;
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    border: 1px solid #ffffff1a;
+    letter-spacing: 0.5px;
+    color: var(--light);
+}
+
+.card p {
+    font-weight: 100!important;
+}
+
+.card h2 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        #ffffff00 0%,
+        #ffffff1a 50%,
+        #ffffff00 100%
+    );
+    transition: left 0.5s ease;
+}
+
+.card:hover .shine {
+    left: 100%;
+}
+
+/* Image */
+.image-container {
+    padding: 0 32px;
+    animation: fadeInUp 1s ease 0.6s forwards;
+    opacity: 0;
+}
+
+.image-container img {
+    border-radius: 15px;
+    border: 1px solid #ffffff1a;
+    box-shadow: 0 4px 32px #88dfff29;
+    transition: all 1s ease;
+}
+
+.image-container img:hover {
+    box-shadow: 0 0 40px -15px #ffff0080; /* Yellow */
+    transition: all 1s ease;
+}
+
+/****************/
+/*      EDA     */
+/****************/
+[aria-label="Select Player"] {
+    flex-direction: row!important;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    width: 100%;
+}
+
+[aria-label="Select Player"] label {
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 10px 30px;
+    border: 1.5px solid transparent !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+[aria-label="Select Player"] label:hover {
+    background-color: #21326a63;
+    border: 1.5px solid var(--secondary) !important;
+}
+
+[aria-label="Select Player"] p {
+    font-weight: 200!important;
+    font-size: 1.3rem!important;
+}
+
+.content-container-no-animation {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 4rem 2rem;
+}
+
+.player-selection {
+    flex-direction: row!important;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.player-selection button {
+    background: #ffffff0d;
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    position: relative;
+    overflow: hidden;
+    border: 1.5px solid #ffffff1a;
+    letter-spacing: 0.5px;
+    color: var(--light);
+    font-size: 1.2rem!important;
+}
+
+.player-selection button p {
+    font-weight: 200!important;
+    letter-spacing: 1px;
+}
+
+.player-selection button:hover, .player-selection > button:focus {
+    background-color: #21326a63;
+    border: 1.5px solid var(--secondary) !important;
+    color: var(--secondary) !important;
+}
+
+.player-selection:hover button:not(:hover):not(:focus),
+.player-selection:focus-within button:not(:focus) {
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+
+
+
+
+.st-key-custom_player div[role="radiogroup"] label {
+    flex-direction: row!important;
+    color: red!important;
+}
+
+/* Form elements */
+.stSelectbox, .stSlider, .stNumberInput {
+    margin-bottom: 1.5rem;
+}
+
+.stSelectbox div, .stSlider div, .stNumberInput div {
+    color: var(--light) !important;
+}
+
+.st-bd, .st-cb, .st-ca {
+    border-color: rgba(255,255,255,0.2) !important;
+}
+
+.st-bs {
+    color: var(--light) !important;
+}
+
+/* Radio button personalizado */
+div[role="radiogroup"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: fadeIn 1s ease 0.8s forwards;
+    opacity: 0;}
+
+.stRadio {
+    margin-top: 4px;
+}
+
+.st-ay {
+    display: none!important;
+}
+
+
+/* Prediction result */
+.result-card {
+    background: rgba(255,255,255,0.05);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+
+/* Form button */
+/* .stButton > button {
+    width: 100%;
+    background: linear-gradient(45deg, var(--primary), var(--secondary)) !important;
+    color: var(--dark) !important;
+    border: none !important;
+    padding: 1rem !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    transition: transform 0.3s ease !important;
+}
+
+.stButton > button:hover {
+    transform: scale(1.05) !important;
+} */
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .gradient-text {
+        font-size: 3rem;
+    }
+    
+    .content-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
