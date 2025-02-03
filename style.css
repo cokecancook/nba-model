@@ -297,35 +297,6 @@ h1 {
     transition: all 1s ease;
 }
 
-/****************/
-/*      EDA     */
-/****************/
-[aria-label="Select Player"] {
-    flex-direction: row!important;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    width: 100%;
-}
-
-[aria-label="Select Player"] label {
-    letter-spacing: 1px;
-    cursor: pointer;
-    padding: 10px 30px;
-    border: 1.5px solid transparent !important;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-[aria-label="Select Player"] label:hover {
-    background-color: #21326a63;
-    border: 1.5px solid var(--secondary) !important;
-}
-
-[aria-label="Select Player"] p {
-    font-weight: 200!important;
-    font-size: 1.3rem!important;
-}
-
 .content-container-no-animation {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
