@@ -187,7 +187,7 @@ body {
 
 /* Hero section */
 .hero {
-    height: 200px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -340,7 +340,7 @@ h1 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
-    padding: 4rem 2rem;
+    padding: 1rem 2rem;
 }
 
 .player-selection {
@@ -350,20 +350,20 @@ h1 {
     gap: 1rem;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: auto;
 }
 
 .player-selection button {
     background: #ffffff0d;
     backdrop-filter: blur(10px);
     border-radius: 10px;
-    padding: 1rem 2rem;
+    padding: 0.6rem 1.2rem;
     position: relative;
     overflow: hidden;
     border: 1.5px solid #ffffff1a;
     letter-spacing: 0.5px;
     color: var(--light);
-    font-size: 1.2rem!important;
+    font-size: 1rem!important;
 }
 
 .player-selection button p {
@@ -464,6 +464,10 @@ div[role="radiogroup"] {
     .hero .gradient-text {
         font-size: 3.5rem;
     }
+
+    .player-selection button {
+        font-size: 0.9rem!important;
+    }
 }
 
 @media (max-width: 810px) {
@@ -481,10 +485,10 @@ div[role="radiogroup"] {
     
     .player-selection button {
         border-radius: 10px;
-        padding: 0.7rem 1.5rem;
+        padding: 0.4rem 1rem;
         border: 1px solid #ffffff1a;
         letter-spacing: 0.6px;
-        font-size: 1rem!important;
+        font-size: 0.8rem!important;
     }
     
     .player-selection button p {
@@ -494,7 +498,10 @@ div[role="radiogroup"] {
     .player-selection button:hover, .player-selection > button:focus {
         border: 1px solid var(--secondary) !important;
     }
-    
+
+    .content-container-no-animation {
+        padding: 1rem 0;
+    }   
 }
 
 @media (max-width: 580px) {
