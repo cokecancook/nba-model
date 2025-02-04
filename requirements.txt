@@ -1,4 +1,10 @@
 streamlit
+scikit-learn
 pandas
+<<<<<<< Updated upstream
 numpy
 matplotlib
+=======
+matplotlib
+numpy
+>>>>>>> Stashed changes
