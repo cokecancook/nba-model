@@ -1,6 +1,10 @@
 # 🏀 NBA Performance Model
 
-A simple Streamlit app showing movie data from [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata). 
+- A simple Streamlit app showing data extracted from the NBA database.
+- Feature engeering to enrich the dataset and prepare it for model training.
+- Basic EDA.
+- Predictions with machine learning models trained on historical NBA data.
+- [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata). 
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://movies-dataset-template.streamlit.app/)
 
