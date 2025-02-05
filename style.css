@@ -83,9 +83,12 @@ body {
 .stSidebar {
     background-color: hsla(204.8780487804878, 77%, 3%, 1);
     width: 200px!important;
-    height: 100vh!important;
+    height: 100%!important;
 }
 
+[data-testid="stMarkdownContainer"]:has(> .sidebar-footer) {
+    height: 55vh;
+}
 /* Sidebar border: disable pointer */
 [data-testid="stSidebarContent"] + div > div > div {
     cursor: auto;
@@ -99,6 +102,10 @@ body {
 /* Sidebar: hide collapse button */
 [data-testid="stSidebarCollapseButton"] {
     display: none;
+}
+
+[data-testid="stSidebarUserContent"] {
+    padding: 0 1.5rem 0!important;
 }
 
 /* Menu */
@@ -126,14 +133,13 @@ body {
 
 /* Footer */
 .sidebar-footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: left;
-    margin-top: 2rem;
-    padding: 1rem 1rem 2rem 1rem;
+    padding: 1rem 1rem 0 1rem;
     font-weight: 200;
     opacity: 0;
     animation: fadeIn 1s ease 1s forwards;
@@ -181,7 +187,7 @@ body {
 
 /* Hero section */
 .hero {
-    height: 200px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -199,16 +205,16 @@ body {
 /* Title */
 h1 {
     letter-spacing: -0.5px;
-    font-size: 5rem!important;
 }
 
-.gradient-text {
+.hero .gradient-text {
     background: linear-gradient(45deg, var(--primary), var(--secondary))!important;
     -webkit-background-clip: text!important;
     background-clip: text!important;
     color: transparent!important;
+    font-size: 5rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 0rem;
     animation: fadeInUp 1s ease;
 }
 
@@ -232,6 +238,8 @@ h1 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 4rem 2rem;
     animation: fadeInUp 1s ease 0.4s forwards;
     opacity: 0;
@@ -281,6 +289,8 @@ h1 {
 /* Image */
 .image-container {
     padding: 0 32px;
+    max-width: 1200px;
+    margin: 0 auto;
     animation: fadeInUp 1s ease 0.6s forwards;
     opacity: 0;
 }
@@ -330,28 +340,30 @@ h1 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
-    padding: 4rem 2rem;
+    padding: 1rem 2rem;
 }
 
 .player-selection {
-    flex-direction: row!important;
     display: flex;
-    justify-content: space-around;
+    flex-direction: row!important;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
     align-items: center;
-    width: 100%;
+    width: auto;
 }
 
 .player-selection button {
     background: #ffffff0d;
     backdrop-filter: blur(10px);
     border-radius: 10px;
-    padding: 1rem 2rem;
+    padding: 0.6rem 1.2rem;
     position: relative;
     overflow: hidden;
     border: 1.5px solid #ffffff1a;
     letter-spacing: 0.5px;
     color: var(--light);
-    font-size: 1.2rem!important;
+    font-size: 1rem!important;
 }
 
 .player-selection button p {
@@ -442,13 +454,65 @@ div[role="radiogroup"] {
 } */
 
 /* Responsive design */
-@media (max-width: 768px) {
-    .gradient-text {
+@media (max-width: 1120px) {
+    .hero .gradient-text {
+        font-size: 4rem;
+    }
+}
+
+@media (max-width: 920px) {
+    .hero .gradient-text {
+        font-size: 3.5rem;
+    }
+
+    .player-selection button {
+        font-size: 0.9rem!important;
+    }
+}
+
+@media (max-width: 810px) {
+    .hero .gradient-text {
         font-size: 3rem;
     }
     
     .content-container {
         grid-template-columns: 1fr;
+    }
+
+    .player-selection {
+        gap: 0.5rem;
+    }
+    
+    .player-selection button {
+        border-radius: 10px;
+        padding: 0.4rem 1rem;
+        border: 1px solid #ffffff1a;
+        letter-spacing: 0.6px;
+        font-size: 0.8rem!important;
+    }
+    
+    .player-selection button p {
+        letter-spacing: 1.2px;
+    }
+    
+    .player-selection button:hover, .player-selection > button:focus {
+        border: 1px solid var(--secondary) !important;
+    }
+
+    .content-container-no-animation {
+        padding: 1rem 0;
+    }   
+}
+
+@media (max-width: 580px) {
+    .hero .gradient-text {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero .gradient-text {
+        font-size: 2rem;
     }
 }
 
