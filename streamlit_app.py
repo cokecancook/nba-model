@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from flask import Flask, request, jsonify
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
@@ -12,6 +13,17 @@ def local_css(file_name):
 
 local_css("style.css")
 
+app = Flask(__name__)
+
+@app.route('/_stcore/streamlit-components/update-player', methods=['POST'])
+def update_player():
+    data = request.get_json()
+    player = data.get('player')
+    if player:
+        st.session_state.selected_player = player
+        return jsonify(success=True)
+    return jsonify(success=False), 400
+
 # ========== Mock Data ========== #
 @st.cache_data
 def load_data(player='lebron-james'):
@@ -22,6 +34,22 @@ def load_data(player='lebron-james'):
     except FileNotFoundError:
         st.error("CSV file not found!")
         return pd.DataFrame()  # Return empty DataFrame as fallback
+
+# Function to update the DataFrame based on the selected player
+def update_df(player):
+    if player == 'Stephen Curry':
+        return load_data('stephen-curry')
+    elif player == 'Giannis Antetokounmpo':
+        return load_data('giannis-antetokounmpo')
+    elif player == 'Luka Dončić':
+        return load_data('luca-doncic')
+    elif player == 'Jayson Tatum':
+        return load_data('jayson-tatum')
+    elif player == 'Lebron James':
+        return load_data('lebron-james')
+    else:
+        return pd.DataFrame()  # Fallback
+
 
 # ========== Pages ========== #
 def introduction():
@@ -60,16 +88,44 @@ def eda():
     st.markdown("""
     <div class="content-container-no-animation">
         <div class="player-selection">
-            <button>Stephen Curry</button>
-            <button>Giannis Antetokounmpo</button>
-            <button>Luka Dončić</button>
-            <button>Jayson Tatum</button>
-            <button class="active">Lebron James</button>
+            <button onclick="selectPlayer('Stephen Curry')">Stephen Curry</button>
+            <button onclick="selectPlayer('Giannis Antetokounmpo')">Giannis Antetokounmpo</button>
+            <button onclick="selectPlayer('Luka Dončić')">Luka Dončić</button>
+            <button onclick="selectPlayer('Jayson Tatum')">Jayson Tatum</button>
+            <button onclick="selectPlayer('Lebron James')">Lebron James</button>
         </div>    
     </div>
     """, unsafe_allow_html=True)
     
-    df = load_data()
+    # JavaScript to handle button clicks and update session state
+    st.markdown("""
+    <script>
+    function selectPlayer(player) {
+        fetch('/_stcore/streamlit-components/update-player', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ player: player })
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();  // Reload the page to update the app
+            }
+        });
+    }
+    </script>
+    """, unsafe_allow_html=True)
+    
+        # Initialize session state for the selected player
+    # if 'selected_player' not in st.session_state:
+    #     st.session_state.selected_player = 'Lebron James'  # Default player
+    
+    if 'selected_player' not in st.session_state:
+        st.session_state.selected_player = None
+
+    df = update_df(st.session_state.selected_player)
+    
+    # df = load_data()
 
     with st.container():
         st.subheader("Player Stats (Last 10 Games)")
