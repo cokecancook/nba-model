@@ -1,7 +1,8 @@
-import streamlit as st
 import pandas as pd
 import numpy as np
-from flask import Flask, request, jsonify
+
+import streamlit as st
+import streamlit.components.v1 as components
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
@@ -13,16 +14,12 @@ def local_css(file_name):
 
 local_css("style.css")
 
-app = Flask(__name__)
+# ========== JS ========== #
+def local_js(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<script>{f.read()}</script>', unsafe_allow_html=True)
 
-@app.route('/_stcore/streamlit-components/update-player', methods=['POST'])
-def update_player():
-    data = request.get_json()
-    player = data.get('player')
-    if player:
-        st.session_state.selected_player = player
-        return jsonify(success=True)
-    return jsonify(success=False), 400
+local_js("script.js")
 
 # ========== Mock Data ========== #
 @st.cache_data
@@ -53,70 +50,18 @@ def update_df(player):
 
 # ========== Pages ========== #
 def introduction():
-    st.markdown("""
-    <div class="hero">
-        <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
-        <h1 class="gradient-text">Performance Model</h1>
-        <p class="subheading">Advanced analytics for player performance forecasting</p>
-    </div>
-
-    <div class="content-container">
-        <div class="card">
-            <p>Create player databases on demand including <span style="color: var(--secondary);"><strong>up-to-date statistics</strong></span> and explore the emerging patterns.</p>
-            <div class="shine"></div>
-        </div>
-        <div class="card">
-            <p>Predict player performance using <span style="color: var(--secondary);"><strong>machine learning</strong></span> models trained on historical NBA data.</p>
-            <div class="shine"></div>
-        </div>
-    </div>
-
-    <div class="image-container">
-        <img src="https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2024/06/1294/728/2024-06-14_2024-2025-NBA-Championship-Futures_16x9-2.jpg" alt="NBA Top Players" title="NBA Top Players">
-    </div>
-    """, unsafe_allow_html=True)
-
+    with open("introduction.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+        
+    components.html(html_content)
+    
 def eda():
-    st.markdown("""
-    <div class="hero">
-        <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
-        <h1 class="gradient-text">Data Analysis</h1>
-        <p class="subheading">Select player to explore statistics, patterns, and trends.</p>
-    </div>    
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="content-container-no-animation">
-        <div class="player-selection">
-            <button onclick="selectPlayer('Stephen Curry')">Stephen Curry</button>
-            <button onclick="selectPlayer('Giannis Antetokounmpo')">Giannis Antetokounmpo</button>
-            <button onclick="selectPlayer('Luka Dončić')">Luka Dončić</button>
-            <button onclick="selectPlayer('Jayson Tatum')">Jayson Tatum</button>
-            <button onclick="selectPlayer('Lebron James')">Lebron James</button>
-        </div>    
-    </div>
-    """, unsafe_allow_html=True)
+    with open("eda.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+        
+    components.html(html_content)    
     
-    # JavaScript to handle button clicks and update session state
-    st.markdown("""
-    <script>
-    function selectPlayer(player) {
-        fetch('/_stcore/streamlit-components/update-player', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ player: player })
-        }).then(response => {
-            if (response.ok) {
-                window.location.reload();  // Reload the page to update the app
-            }
-        });
-    }
-    </script>
-    """, unsafe_allow_html=True)
-    
-        # Initialize session state for the selected player
+    # Initialize session state for the selected player
     # if 'selected_player' not in st.session_state:
     #     st.session_state.selected_player = 'Lebron James'  # Default player
     
@@ -154,28 +99,16 @@ def eda():
 
 
 def prediction():
-    st.markdown("""
-    <div class="hero">
-        <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
-        <h1 class="gradient-text">Points Prediction</h1>
-        <p class="subheading">Predict future performance for upcomming game.</p>
-    </div>    
-    """, unsafe_allow_html=True)
+    with open("prediction.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+        
+    components.html(html_content)    
     
     
 
 # ========== Main App ========== #
 def main():
     page = st.sidebar.radio("", ["🏀 Introduction", "🔍 EDA", "🔮 Prediction"])
-    
-    st.sidebar.markdown("""
-        <div class="sidebar-footer">
-            <p class="sidebar-footer-subheading">Developed by:</p>
-            <p><a href="https://github.com/Maurobalas" target="_blank">Mauro Balaguer</a></p>
-            <p><a href="https://github.com/anpiboi" target="_blank">Andreu Picornell</a></p>
-            <p><a href="https://github.com/cokecancook" target="_blank">Coke Stuyck</a></p>
-        </div>
-    """, unsafe_allow_html=True)
 
     if page == "🏀 Introduction":
         introduction()
@@ -183,6 +116,11 @@ def main():
         eda()
     elif page == "🔮 Prediction":
         prediction()
+        
+    with open("main.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
+        
+    components.html(html_content)    
 
 if __name__ == "__main__":
     main()
