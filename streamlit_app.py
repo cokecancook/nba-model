@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from prediction import predict_points
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
@@ -105,6 +106,20 @@ def prediction():
         <p class="subheading">Predict future performance for upcomming game.</p>
     </div>    
     """, unsafe_allow_html=True)
+
+    # Inputs del usuario para los últimos 5 partidos
+    st.subheader("Enter points from the last 5 games:")
+    pts = []
+    for i in range(5):
+        pts.append(st.number_input(f"Game {i+1}", min_value=0, max_value=100, value=30, step=1))
+
+    # Botón para predecir
+    if st.button("Predict Next Game Points"):
+        predicted_pts = predict_points(pts)
+
+        # Mostrar resultado
+        st.success(f"🎯 Predicción de puntos para el próximo partido: {predicted_pts:.2f}")
+    
     
     
 
