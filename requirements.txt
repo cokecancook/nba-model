@@ -3,4 +3,4 @@ scikit-learn
 pandas
 matplotlib
 numpy
-flask
+nba_api
