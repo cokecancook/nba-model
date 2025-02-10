@@ -3,5 +3,6 @@ scikit-learn
 pandas
 matplotlib
 numpy
+nba_api
 keras
 tensorflow

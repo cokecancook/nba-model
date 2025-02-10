@@ -7,22 +7,34 @@ from prediction import predict_points
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
 
 # ========== CSS ========== #
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-local_css("style.css")
-
-# ========== Mock Data ========== #
 @st.cache_data
+def load_css(file_name):
+    with open(file_name) as f:
+        return f.read()  # Return CSS content
+
+# Load CSS once and apply
+css_content = load_css("style.css")
+st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
+
+
+# ========== Data ========== #
 def load_data(player='lebron-james'):
     try:
-        df = pd.read_csv(f"data/{player}.csv")
-        
+        df = pd.read_csv(f"data/{player}.csv")      
         return df
     except FileNotFoundError:
         st.error("CSV file not found!")
         return pd.DataFrame()  # Return empty DataFrame as fallback
+
+
+# Initialize session state for selected player
+if "selected_player" not in st.session_state:
+    st.session_state.current_df = load_data("lebron-james")
+    
+# Function to update the DataFrame based on the selected player
+def update_dataframe(player):
+    st.session_state.current_df = load_data(player)
+
 
 # ========== Pages ========== #
 def introduction():
@@ -57,39 +69,40 @@ def eda():
         <p class="subheading">Select player to explore statistics, patterns, and trends.</p>
     </div>    
     """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="content-container-no-animation">
-        <div class="player-selection">
-            <button>Stephen Curry</button>
-            <button>Giannis Antetokounmpo</button>
-            <button>Luka Dončić</button>
-            <button>Jayson Tatum</button>
-            <button class="active">Lebron James</button>
-        </div>    
-    </div>
-    """, unsafe_allow_html=True)
     
-    df = load_data()
+    col1, col2, col3 = st.columns([0.21, 7, 0.21])
+
+    with col2:
+        player1, player2, player3, player4, player5 = st.columns(5)
+        if player1.button("Stephen Curry", use_container_width=True):
+            update_dataframe('stephen-curry')
+        if player2.button("Giannis Antetokounmpo", use_container_width=True):
+            update_dataframe('giannis-antetokounmpo')
+        if player3.button("Luka Dončić", use_container_width=True):
+            update_dataframe('luka-dončić')
+        if player4.button("Jayson Tatum", use_container_width=True):
+            update_dataframe('jayson-tatum')
+        if player5.button("LeBron James", use_container_width=True):
+            update_dataframe('lebron-james')
 
     with st.container():
         st.subheader("Player Stats (Last 10 Games)")
-        col1, col2, col3 = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
+        col1b, col2b, col3b = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
 
-        with col2:  # Middle column controls the width
+        with col2b:  # Middle column controls the width
             st.dataframe(
-                df.tail(10)
+                st.session_state.current_df.tail(10)
                 .sort_index(ascending=False)
                 .style.background_gradient(cmap="Blues"),
                 use_container_width=True,  # Fits within the column width
             )
                 
     with st.container():
-        st.write(f"Points Scored per Game in the current Season")
+        st.subheader(f"PPG Scored (Current Season)")
         col1, col2, col3 = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
 
         with col2:  # Middle column controls the width
-            last_100_values = df.tail(100)
+            last_100_values = st.session_state.current_df.tail(100)
 
             st.line_chart(
                 last_100_values["PTS"],  # Use the PTS column
