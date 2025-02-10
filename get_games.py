@@ -33,6 +33,6 @@ class getGames:
 
         
 if __name__ == "__main__":
-    player_id = 2544
-    player_all_games = getGames(player_id).enrich_stats()
-    print(player_all_games)
+    player_ids = [2544, 1628369, 1629029, 201939, 203507]
+    for player_id in player_ids:
+        player_all_games = getGames(player_id).enrich_stats()
