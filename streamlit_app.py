@@ -1,95 +1,107 @@
+import streamlit as st
 import pandas as pd
 import numpy as np
-
-import streamlit as st
-import streamlit.components.v1 as components
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
 
 # ========== CSS ========== #
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-local_css("style.css")
-
-# ========== JS ========== #
-def local_js(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<script>{f.read()}</script>', unsafe_allow_html=True)
-
-local_js("script.js")
-
-# ========== Mock Data ========== #
 @st.cache_data
+def load_css(file_name):
+    with open(file_name) as f:
+        return f.read()  # Return CSS content
+
+# Load CSS once and apply
+css_content = load_css("style.css")
+st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
+
+
+# ========== Data ========== #
 def load_data(player='lebron-james'):
     try:
-        df = pd.read_csv(f"data/{player}.csv")
-        
+        df = pd.read_csv(f"data/{player}.csv")      
         return df
     except FileNotFoundError:
         st.error("CSV file not found!")
         return pd.DataFrame()  # Return empty DataFrame as fallback
 
+
+# Initialize session state for selected player
+if "selected_player" not in st.session_state:
+    st.session_state.current_df = load_data("lebron-james")
+    
 # Function to update the DataFrame based on the selected player
-def update_df(player):
-    if player == 'Stephen Curry':
-        return load_data('stephen-curry')
-    elif player == 'Giannis Antetokounmpo':
-        return load_data('giannis-antetokounmpo')
-    elif player == 'Luka Dončić':
-        return load_data('luca-doncic')
-    elif player == 'Jayson Tatum':
-        return load_data('jayson-tatum')
-    elif player == 'Lebron James':
-        return load_data('lebron-james')
-    else:
-        return pd.DataFrame()  # Fallback
+def update_dataframe(player):
+    st.session_state.current_df = load_data(player)
 
 
 # ========== Pages ========== #
 def introduction():
-    with open("introduction.html", "r", encoding="utf-8") as file:
-        html_content = file.read()
-        
-    components.html(html_content)
-    
-def eda():
-    with open("eda.html", "r", encoding="utf-8") as file:
-        html_content = file.read()
-        
-    components.html(html_content)    
-    
-    # Initialize session state for the selected player
-    # if 'selected_player' not in st.session_state:
-    #     st.session_state.selected_player = 'Lebron James'  # Default player
-    
-    if 'selected_player' not in st.session_state:
-        st.session_state.selected_player = None
+    st.markdown("""
+    <div class="hero">
+        <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
+        <h1 class="gradient-text">Performance Model</h1>
+        <p class="subheading">Advanced analytics for player performance forecasting</p>
+    </div>
 
-    df = update_df(st.session_state.selected_player)
+    <div class="content-container">
+        <div class="card">
+            <p>Create player databases on demand including <span style="color: var(--secondary);"><strong>up-to-date statistics</strong></span> and explore the emerging patterns.</p>
+            <div class="shine"></div>
+        </div>
+        <div class="card">
+            <p>Predict player performance using <span style="color: var(--secondary);"><strong>machine learning</strong></span> models trained on historical NBA data.</p>
+            <div class="shine"></div>
+        </div>
+    </div>
+
+    <div class="image-container">
+        <img src="https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2024/06/1294/728/2024-06-14_2024-2025-NBA-Championship-Futures_16x9-2.jpg" alt="NBA Top Players" title="NBA Top Players">
+    </div>
+    """, unsafe_allow_html=True)
+
+def eda():
+    st.markdown("""
+    <div class="hero">
+        <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
+        <h1 class="gradient-text">Data Analysis</h1>
+        <p class="subheading">Select player to explore statistics, patterns, and trends.</p>
+    </div>    
+    """, unsafe_allow_html=True)
     
-    # df = load_data()
+    col1, col2, col3 = st.columns([0.21, 7, 0.21])
+
+    with col2:
+        player1, player2, player3, player4, player5 = st.columns(5)
+        if player1.button("Stephen Curry", use_container_width=True):
+            update_dataframe('stephen-curry')
+        if player2.button("Giannis Antetokounmpo", use_container_width=True):
+            update_dataframe('giannis-antetokounmpo')
+        if player3.button("Luka Dončić", use_container_width=True):
+            update_dataframe('luka-doncic')
+        if player4.button("Jayson Tatum", use_container_width=True):
+            update_dataframe('jayson-tatum')
+        if player5.button("LeBron James", use_container_width=True):
+            update_dataframe('lebron-james')
 
     with st.container():
         st.subheader("Player Stats (Last 10 Games)")
-        col1, col2, col3 = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
+        col1b, col2b, col3b = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
 
-        with col2:  # Middle column controls the width
+        with col2b:  # Middle column controls the width
             st.dataframe(
-                df.tail(10)
+                st.session_state.current_df.tail(10)
                 .sort_index(ascending=False)
                 .style.background_gradient(cmap="Blues"),
                 use_container_width=True,  # Fits within the column width
             )
                 
     with st.container():
-        st.write(f"Points Scored per Game in the current Season")
+        st.subheader(f"PPG Scored (Current Season)")
         col1, col2, col3 = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
 
         with col2:  # Middle column controls the width
-            last_100_values = df.tail(100)
+            last_100_values = st.session_state.current_df.tail(100)
 
             st.line_chart(
                 last_100_values["PTS"],  # Use the PTS column
@@ -99,16 +111,28 @@ def eda():
 
 
 def prediction():
-    with open("prediction.html", "r", encoding="utf-8") as file:
-        html_content = file.read()
-        
-    components.html(html_content)    
+    st.markdown("""
+    <div class="hero">
+        <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
+        <h1 class="gradient-text">Points Prediction</h1>
+        <p class="subheading">Predict future performance for upcomming game.</p>
+    </div>    
+    """, unsafe_allow_html=True)
     
     
 
 # ========== Main App ========== #
 def main():
     page = st.sidebar.radio("", ["🏀 Introduction", "🔍 EDA", "🔮 Prediction"])
+    
+    st.sidebar.markdown("""
+        <div class="sidebar-footer">
+            <p class="sidebar-footer-subheading">Developed by:</p>
+            <p><a href="https://github.com/Maurobalas" target="_blank">Mauro Balaguer</a></p>
+            <p><a href="https://github.com/anpiboi" target="_blank">Andreu Picornell</a></p>
+            <p><a href="https://github.com/cokecancook" target="_blank">Coke Stuyck</a></p>
+        </div>
+    """, unsafe_allow_html=True)
 
     if page == "🏀 Introduction":
         introduction()
@@ -116,11 +140,6 @@ def main():
         eda()
     elif page == "🔮 Prediction":
         prediction()
-        
-    with open("main.html", "r", encoding="utf-8") as file:
-        html_content = file.read()
-        
-    components.html(html_content)    
 
 if __name__ == "__main__":
     main()
