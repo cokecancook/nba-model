@@ -78,7 +78,7 @@ def eda():
         if player2.button("Giannis Antetokounmpo", use_container_width=True):
             update_dataframe('giannis-antetokounmpo')
         if player3.button("Luka Dončić", use_container_width=True):
-            update_dataframe('luka-doncic')
+            update_dataframe('luka-dončić')
         if player4.button("Jayson Tatum", use_container_width=True):
             update_dataframe('jayson-tatum')
         if player5.button("LeBron James", use_container_width=True):
