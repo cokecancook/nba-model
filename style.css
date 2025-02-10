@@ -353,7 +353,8 @@ h1 {
     width: auto;
 }
 
-.player-selection button {
+.player-selection button,
+.stButton > button {
     background: #ffffff0d;
     backdrop-filter: blur(10px);
     border-radius: 10px;
@@ -371,14 +372,19 @@ h1 {
     letter-spacing: 1px;
 }
 
-.player-selection button:hover, .player-selection > button:focus {
+.player-selection button:hover,
+.player-selection > button:focus,
+.stButton button:hover,
+.stButton > button:focus {
     background-color: #21326a63;
     border: 1.5px solid var(--secondary) !important;
     color: var(--secondary) !important;
 }
 
 .player-selection:hover button:not(:hover):not(:focus),
-.player-selection:focus-within button:not(:focus) {
+.player-selection:focus-within button:not(:focus),
+.stButton > button:not(:hover):not(:focus),
+.stButton > button:not(:focus) {
     opacity: 0.4;
     transition: all 0.3s ease;
 }
