@@ -2,9 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from prediction import predict_points
+import get_games as gg
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
+
 
 # ========== CSS ========== #
 @st.cache_data
@@ -16,6 +18,17 @@ def load_css(file_name):
 css_content = load_css("style.css")
 st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
 
+dataframes = []
+
+@st.cache_data
+def load_dataframes():
+    player_ids = [2544, 1628369, 1629029, 201939, 203507]
+    for player_id in player_ids:
+        dataframes.append(gg.getGames(player_id).enrich_stats())
+    
+    return dataframes
+
+# load_dataframes()
 
 # ========== Data ========== #
 def load_data(player='lebron-james'):
@@ -74,15 +87,15 @@ def eda():
 
     with col2:
         player1, player2, player3, player4, player5 = st.columns(5)
-        if player1.button("Stephen Curry", use_container_width=True):
+        if player1.button("Curry", use_container_width=True):
             update_dataframe('stephen-curry')
-        if player2.button("Giannis Antetokounmpo", use_container_width=True):
+        if player2.button("Giannis", use_container_width=True):
             update_dataframe('giannis-antetokounmpo')
-        if player3.button("Luka Dončić", use_container_width=True):
+        if player3.button("Dončić", use_container_width=True):
             update_dataframe('luka-dončić')
-        if player4.button("Jayson Tatum", use_container_width=True):
+        if player4.button("Tatum", use_container_width=True):
             update_dataframe('jayson-tatum')
-        if player5.button("LeBron James", use_container_width=True):
+        if player5.button("LeBron", use_container_width=True):
             update_dataframe('lebron-james')
 
     with st.container():
