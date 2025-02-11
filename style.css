@@ -372,8 +372,6 @@ h1 {
     letter-spacing: 1px;
 }
 
-.player-selection button:hover,
-.player-selection > button:focus,
 .stButton button:hover,
 .stButton > button:focus {
     background-color: #21326a63;
@@ -381,8 +379,6 @@ h1 {
     color: var(--secondary) !important;
 }
 
-.player-selection:hover button:not(:hover):not(:focus),
-.player-selection:focus-within button:not(:focus),
 .stButton > button:not(:hover):not(:focus),
 .stButton > button:not(:focus) {
     opacity: 0.4;
