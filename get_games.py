@@ -1,7 +1,7 @@
 import functions as f
 
 class getGames:
-    def __init__(self, player_id, recent_seasons=1):
+    def __init__(self, player_id, recent_seasons=2):
         self.player_id = player_id
         year_start, year_end = f.get_seasons_played(self.player_id)
         year_start = int(year_end) - recent_seasons
