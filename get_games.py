@@ -12,6 +12,7 @@ class getGames:
         self.player_all_games['WEEK_DAY'] = self.player_all_games['GAME_DATE'].apply(f.date_to_weekday)
         self.player_all_games = f.calculate_rest_days(self.player_all_games)
 
+        f.get_home_game(self.player_all_games)
         f.get_team_id(self.player_all_games)
         f.get_opponent_id(self.player_all_games)
         f.format_season_id(self.player_all_games)
