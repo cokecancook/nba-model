@@ -183,13 +183,24 @@ def prediction():
                 # Inputs del usuario para los últimos 5 partidos
                 st.subheader("Upcoming Game")
 
+                model_files = {
+                    "Curry": "stephen-curry",
+                    "Giannis": "giannis-antetokounmpo",
+                    "Dončić": "luka-doncic",
+                    "Tatum": "jayson-tatum",
+                    "LeBron": "lebron-james",
+                }
+
+                # Obtener el nombre de archivo correspondiente al jugador seleccionado
+                player_key = model_files.get(st.session_state.player_name)
+
                 # Botón para predecir
                 if st.button("Predict Next Game Points", key="predict", use_container_width=True):
-                    # predicted_pts = predict_points(pts)
-                    predicted_pts = 26
+                    # Llamar al modelo correcto
+                    predicted_pts = predict_points(player_key)
 
                     # Mostrar resultado
-                    st.success(f"🎯 PPG Predicition: {predicted_pts}")
+                    st.success(f"🎯 PPG Prediction: {predicted_pts}")
         
     
     
