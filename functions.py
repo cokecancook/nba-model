@@ -63,6 +63,11 @@ def calculate_rest_days(df, date_column='GAME_DATE'):
     
     return data
 
+def get_home_game(df):
+    
+    df['HOME'] = df['MATCHUP'].apply(lambda x: 0 if '@' in x else 1)
+    
+    return df
 
 def get_team_id(df):
     
