@@ -94,7 +94,7 @@ def eda():
             update_dataframe('giannis-antetokounmpo')
             st.session_state.player_name = 'Giannis'
         if player3.button("Dončić", use_container_width=True):
-            update_dataframe('luka-dončić')
+            update_dataframe('luka-doncic')
             st.session_state.player_name = 'Dončić'
         if player4.button("Tatum", use_container_width=True):
             update_dataframe('jayson-tatum')
@@ -154,7 +154,7 @@ def prediction():
             update_dataframe('giannis-antetokounmpo')
             st.session_state.player_name = 'Giannis'
         if player3.button("Dončić", use_container_width=True):
-            update_dataframe('luka-dončić')
+            update_dataframe('luka-doncic')
             st.session_state.player_name = 'Dončić'
         if player4.button("Tatum", use_container_width=True):
             update_dataframe('jayson-tatum')
