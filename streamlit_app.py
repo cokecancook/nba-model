@@ -7,7 +7,6 @@ import get_games as gg
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
 
-
 # ========== CSS ========== #
 @st.cache_data
 def load_css(file_name):
@@ -28,8 +27,6 @@ def load_dataframes():
     
     return dataframes
 
-# load_dataframes()
-
 # ========== Data ========== #
 def load_data(player='lebron-james'):
     try:
@@ -39,18 +36,21 @@ def load_data(player='lebron-james'):
         st.error("CSV file not found!")
         return pd.DataFrame()  # Return empty DataFrame as fallback
 
-
 # Initialize session state for selected player
-if "selected_player" not in st.session_state:
-    st.session_state.current_df = load_data("lebron-james")
-    
+@st.cache_data
+def initialize_selected_player(player='lebron-james'):
+    st.session_state.current_df = load_data(player)
+    st.session_state.selected_player = player
+    st.session_state.player_name = 'LeBron'
+
 # Function to update the DataFrame based on the selected player
 def update_dataframe(player):
     st.session_state.current_df = load_data(player)
-
+    st.session_state.selected_player = player
 
 # ========== Pages ========== #
 def introduction():
+    initialize_selected_player()
     st.markdown("""
     <div class="hero">
         <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
@@ -82,48 +82,58 @@ def eda():
         <p class="subheading">Select player to explore statistics, patterns, and trends.</p>
     </div>    
     """, unsafe_allow_html=True)
-    
+        
     col1, col2, col3 = st.columns([0.21, 7, 0.21])
-
+    
     with col2:
         player1, player2, player3, player4, player5 = st.columns(5)
         if player1.button("Curry", use_container_width=True):
             update_dataframe('stephen-curry')
+            st.session_state.player_name = 'Curry'
         if player2.button("Giannis", use_container_width=True):
             update_dataframe('giannis-antetokounmpo')
+            st.session_state.player_name = 'Giannis'
         if player3.button("Dončić", use_container_width=True):
             update_dataframe('luka-dončić')
+            st.session_state.player_name = 'Dončić'
         if player4.button("Tatum", use_container_width=True):
             update_dataframe('jayson-tatum')
+            st.session_state.player_name = 'Tatum'
         if player5.button("LeBron", use_container_width=True):
             update_dataframe('lebron-james')
+            st.session_state.player_name = 'LeBron'
 
-    with st.container():
-        st.subheader("Player Stats (Last 10 Games)")
-        col1b, col2b, col3b = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
+    if st.session_state.selected_player is not None:
+        
+        with st.container():
+            col1b, col2b, col3b, col4b = st.columns([0.21, 3.5, 3.5, 0.21])  # Adjust middle column width as needed
 
-        with col2b:  # Middle column controls the width
-            st.dataframe(
-                st.session_state.current_df.tail(10)
-                .sort_index(ascending=False)
-                .style.background_gradient(cmap="Blues"),
-                use_container_width=True,  # Fits within the column width
-            )
-                
-    with st.container():
-        st.subheader(f"PPG Scored (Current Season)")
-        col1, col2, col3 = st.columns([0.21, 7, 0.21])  # Adjust middle column width as needed
+            with col2b:  # Middle column controls the width
+                st.subheader(f"{st.session_state.player_name}'s PPG (Last 100 Games)")
+                last_100_values = st.session_state.current_df.tail(100)
 
-        with col2:  # Middle column controls the width
-            last_100_values = st.session_state.current_df.tail(100)
+                st.line_chart(
+                    last_100_values["PTS"],  # Use the PTS column
+                    use_container_width=True,
+                    height=240
+                )
+            with col3b:  # Middle column controls the width
+                st.subheader(f"Stats")
+                st.dataframe(
+                    st.session_state.current_df
+                    .sort_index(ascending=False)
+                    .style.background_gradient(cmap="Blues"),
+                    use_container_width=True,  # Fits within the column width
+                    height=240,
+                )
+    else:
+        st.info("Select a player to explore statistics.")
+    
+    col1, col2, col3 = st.columns([0.21, 7, 0.21])
 
-            st.line_chart(
-                last_100_values["PTS"],  # Use the PTS column
-                use_container_width=True
-            )
-            # Optional: Add a title
-
-
+    with col2:
+        st.button("Download latest data (for all 5 players)", on_click=load_dataframes, use_container_width=True)
+        
 def prediction():
     st.markdown("""
     <div class="hero">
@@ -132,20 +142,55 @@ def prediction():
         <p class="subheading">Predict future performance for upcomming game.</p>
     </div>    
     """, unsafe_allow_html=True)
-
-    # Inputs del usuario para los últimos 5 partidos
-    st.subheader("Enter points from the last 5 games:")
-    pts = []
-    for i in range(5):
-        pts.append(st.number_input(f"Game {i+1}", min_value=0, max_value=100, value=30, step=1))
-
-    # Botón para predecir
-    if st.button("Predict Next Game Points"):
-        predicted_pts = predict_points(pts)
-
-        # Mostrar resultado
-        st.success(f"🎯 Predicción de puntos para el próximo partido: {predicted_pts:.2f}")
     
+    col1, col2, col3 = st.columns([0.21, 7, 0.21])
+
+    with col2:
+        player1, player2, player3, player4, player5 = st.columns(5)
+        if player1.button("Curry", use_container_width=True):
+            update_dataframe('stephen-curry')
+            st.session_state.player_name = 'Curry'
+        if player2.button("Giannis", use_container_width=True):
+            update_dataframe('giannis-antetokounmpo')
+            st.session_state.player_name = 'Giannis'
+        if player3.button("Dončić", use_container_width=True):
+            update_dataframe('luka-dončić')
+            st.session_state.player_name = 'Dončić'
+        if player4.button("Tatum", use_container_width=True):
+            update_dataframe('jayson-tatum')
+            st.session_state.player_name = 'Tatum'
+        if player5.button("LeBron", use_container_width=True):
+            update_dataframe('lebron-james')
+            st.session_state.player_name = 'LeBron'
+    
+    if st.session_state.selected_player is not None:
+        with st.container():
+
+            col1c, col2c, col3c, col4c = st.columns([0.21, 3.5, 3.5, 0.21])  # Adjust middle column width as needed
+
+            with col2c:
+                st.subheader(f"{st.session_state.player_name}'s PPG (Last 100 Games)")
+                last_100_values = st.session_state.current_df.tail(100)
+
+                st.line_chart(
+                    last_100_values["PTS"],  # Use the PTS column
+                    use_container_width=True,
+                    height=240,
+            
+                )
+
+            with col3c:
+                # Inputs del usuario para los últimos 5 partidos
+                st.subheader("Upcoming Game")
+
+                # Botón para predecir
+                if st.button("Predict Next Game Points", key="predict", use_container_width=True):
+                    # predicted_pts = predict_points(pts)
+                    predicted_pts = 26
+
+                    # Mostrar resultado
+                    st.success(f"🎯 PPG Predicition: {predicted_pts}")
+        
     
     
 
