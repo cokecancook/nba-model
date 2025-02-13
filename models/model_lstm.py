@@ -167,7 +167,7 @@ if __name__ == "__main__":
     
     PLAYER = 'jayson-tatum'
     
-    file_path = f'data/{PLAYER}.csv'
+    file_path = f'../data/{PLAYER}.csv'
     lstm_model = LSTMModel(
         file_path=file_path,
         target_column='PTS',
@@ -175,6 +175,6 @@ if __name__ == "__main__":
         train_size=0.80,
         epochs=100,  # Increased epochs for potential better training
         batch_size=32,  # Adjusted batch size for efficiency
-        model_save_path=f'models/model-{PLAYER}.h5'
+        model_save_path=f'{PLAYER}-lstm.h5'
     )
     metrics = lstm_model.run_pipeline()
