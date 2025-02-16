@@ -5,6 +5,13 @@ from prediction import predict_points_combined
 import get_games as gg
 from teams import TEAMS_DF
 
+def initialize_session_state():
+    if 'selected_player' not in st.session_state:
+        st.session_state.selected_player = None
+    if 'player_name' not in st.session_state:
+        st.session_state.player_name = None
+    if 'current_df' not in st.session_state:
+        st.session_state.current_df = pd.DataFrame()  
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
@@ -150,22 +157,38 @@ def prediction():
     with col2:
         # Player selection buttons
         player1, player2, player3, player4, player5 = st.columns(5)
+        
+        # Inicializa el estado de la sesión si no existe
+        if 'selected_player' not in st.session_state:
+            st.session_state.selected_player = None
+        if 'player_name' not in st.session_state:
+            st.session_state.player_name = None
+        if 'current_df' not in st.session_state:
+            st.session_state.current_df = None
+        
+        # Botones para seleccionar jugador
         if player1.button("Curry", use_container_width=True, key="curry"):
             update_dataframe('stephen-curry')
+            st.session_state.selected_player = 'stephen-curry'
             st.session_state.player_name = 'Curry'
         if player2.button("Giannis", use_container_width=True, key="giannis"):
             update_dataframe('giannis-antetokounmpo')
+            st.session_state.selected_player = 'giannis-antetokounmpo'
             st.session_state.player_name = 'Giannis'
-        if player3.button("Dončić", use_container_width=True):
+        if player3.button("Dončić", use_container_width=True, key="doncic"):
             update_dataframe('luka-doncic')
+            st.session_state.selected_player = 'luka-doncic'
             st.session_state.player_name = 'Dončić'
         if player4.button("Tatum", use_container_width=True, key="tatum"):
             update_dataframe('jayson-tatum')
+            st.session_state.selected_player = 'jayson-tatum'
             st.session_state.player_name = 'Tatum'
         if player5.button("LeBron", use_container_width=True, key="lebron"):
             update_dataframe('lebron-james')
+            st.session_state.selected_player = 'lebron-james'
             st.session_state.player_name = 'LeBron'
     
+    # Verifica si hay un jugador seleccionado
     if st.session_state.selected_player is not None:
         with st.container():
             # Display player's historical performance
@@ -183,6 +206,7 @@ def prediction():
             with col3c:
                 st.subheader("Upcoming Game")
                 
+                # Mapeo de nombres de jugadores a claves de modelo
                 model_files = {
                     "Curry": "stephen-curry",
                     "Giannis": "giannis-antetokounmpo",
@@ -190,33 +214,38 @@ def prediction():
                     "Tatum": "jayson-tatum",
                     "LeBron": "lebron-james",
                 }
-                # Get the player key based on the selected player
+                
+                # Obtener la clave del jugador seleccionado
                 player_key = model_files.get(st.session_state.player_name)
                 
-                # Additional inputs:
+                # Inputs adicionales para la predicción
                 week_day = st.selectbox("Week Day", options=[1, 2, 3, 4, 5, 6, 7])
                 rest_days = st.number_input("Rest Days", value=0, step=1)
                 
-                # Select opponent from the defined TEAMS_DF (using current teams only)
+                # Selección del oponente
                 opponent = st.selectbox("Opponent", options=TEAMS_DF["team_names"].iloc[:30].tolist())
-                # Get the full team id and then use only the last 2 digits
                 opponent_full_id = TEAMS_DF.loc[TEAMS_DF["team_names"] == opponent, "id"].iloc[0]
-                opponent_id = str(opponent_full_id)[-2:]
+                opponent_id = str(opponent_full_id)[-2:]  # Usar solo los últimos 2 dígitos del ID
                 
-                # Select game location (Home/Away)
+                # Selección de la ubicación del partido (Home/Away)
                 location = st.selectbox("Game Location", options=["Home", "Away"])
                 home = 1 if location == "Home" else 0
                 
-                # Trigger prediction on button click
+                # Botón para realizar la predicción
                 if st.button("Predict Next Game Points", key="predict", use_container_width=True):
                     predicted_pts = predict_points_combined(player_key, week_day, rest_days, opponent_id, home)
                     st.success(f"🎯 PPG Prediction: {predicted_pts:.2f}")
+    else:
+        st.warning("Please select a player to make a prediction.")
 
     
     
 
 # ========== Main App ========== #
 def main():
+# Inicializar el estado de la sesión
+    initialize_session_state()
+    
     page = st.sidebar.radio("Select a Page", ["🏀 Introduction", "🔍 EDA", "🔮 Prediction"], key="menu", label_visibility="hidden")
     
     st.sidebar.markdown("""
