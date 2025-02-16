@@ -1,8 +1,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from prediction import predict_points
+from prediction import predict_points_combined
 import get_games as gg
+from teams import TEAMS_DF
+
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
@@ -139,13 +141,14 @@ def prediction():
     <div class="hero">
         <img src="https://cdn.nba.com/logos/leagues/logo-nba.svg" alt="NBA Logo" title="NBA Logo">
         <h1 class="gradient-text">Points Prediction</h1>
-        <p class="subheading">Predict future performance for upcomming game.</p>
-    </div>    
+        <p class="subheading">Predict future performance for upcoming game.</p>
+    </div>
     """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([0.21, 7, 0.21])
-
+    
     with col2:
+        # Player selection buttons
         player1, player2, player3, player4, player5 = st.columns(5)
         if player1.button("Curry", use_container_width=True, key="curry"):
             update_dataframe('stephen-curry')
@@ -165,24 +168,21 @@ def prediction():
     
     if st.session_state.selected_player is not None:
         with st.container():
-
-            col1c, col2c, col3c, col4c = st.columns([0.21, 3.5, 3.5, 0.21])  # Adjust middle column width as needed
-
+            # Display player's historical performance
+            col1c, col2c, col3c, col4c = st.columns([0.21, 3.5, 3.5, 0.21])
+            
             with col2c:
                 st.subheader(f"{st.session_state.player_name}'s PPG (Last 100 Games)")
                 last_100_values = st.session_state.current_df.tail(100)
-
                 st.line_chart(
-                    last_100_values["PTS"],  # Use the PTS column
+                    last_100_values["PTS"],
                     use_container_width=True,
                     height=240,
-            
                 )
-
+            
             with col3c:
-                # Inputs del usuario para los últimos 5 partidos
                 st.subheader("Upcoming Game")
-
+                
                 model_files = {
                     "Curry": "stephen-curry",
                     "Giannis": "giannis-antetokounmpo",
@@ -190,18 +190,28 @@ def prediction():
                     "Tatum": "jayson-tatum",
                     "LeBron": "lebron-james",
                 }
-
-                # Obtener el nombre de archivo correspondiente al jugador seleccionado
+                # Get the player key based on the selected player
                 player_key = model_files.get(st.session_state.player_name)
-
-                # Botón para predecir
+                
+                # Additional inputs:
+                week_day = st.selectbox("Week Day", options=[1, 2, 3, 4, 5, 6, 7])
+                rest_days = st.number_input("Rest Days", value=0, step=1)
+                
+                # Select opponent from the defined TEAMS_DF (using current teams only)
+                opponent = st.selectbox("Opponent", options=TEAMS_DF["team_names"].iloc[:30].tolist())
+                # Get the full team id and then use only the last 2 digits
+                opponent_full_id = TEAMS_DF.loc[TEAMS_DF["team_names"] == opponent, "id"].iloc[0]
+                opponent_id = str(opponent_full_id)[-2:]
+                
+                # Select game location (Home/Away)
+                location = st.selectbox("Game Location", options=["Home", "Away"])
+                home = 1 if location == "Home" else 0
+                
+                # Trigger prediction on button click
                 if st.button("Predict Next Game Points", key="predict", use_container_width=True):
-                    # Llamar al modelo correcto
-                    predicted_pts = predict_points(player_key)
-
-                    # Mostrar resultado
+                    predicted_pts = predict_points_combined(player_key, week_day, rest_days, opponent_id, home)
                     st.success(f"🎯 PPG Prediction: {predicted_pts}")
-        
+
     
     
 

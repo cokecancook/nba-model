@@ -178,28 +178,69 @@ class LSTMModel(BaseModel):
         return metrics
 
 class MLPModel(BaseModel):
-    def __init__(self, file_path, target_column='PTS', look_back=5, train_size=0.8, 
+    def __init__(self, file_path, target_column='PTS', parameters=[],train_size=0.8,
                 epochs=80, batch_size=16, model_save_path='model_mlp.h5'):
-        super().__init__(file_path, target_column, look_back, train_size)
+        # We no longer need the look_back parameter for MLP
+        super().__init__(file_path, target_column, look_back=None, train_size=train_size)
         self.epochs = epochs
         self.batch_size = batch_size
         self.model_save_path = model_save_path
         self.model = None
         self.trainPredict, self.testPredict = None, None
+        self.parameters = parameters
+
+    def preprocess_data(self):
+        """
+        Preprocess the data using the selected feature columns for X and the target column for Y.
+        X: WEEK_DAY, REST_DAYS, OPPONENT_ID, HOME
+        Y: PTS
+        """
+        features = ['WEEK_DAY', 'REST_DAYS', 'OPPONENT_ID', 'HOME']
+        # Check that all required columns exist
+        missing_features = [col for col in features if col not in self.df.columns]
+        if missing_features:
+            raise ValueError(f"Missing features in the dataset: {missing_features}")
+        if self.target_column not in self.df.columns:
+            raise ValueError(f"Target column '{self.target_column}' not found in the dataset.")
+
+        # Create separate scalers for features and target
+        self.scaler_X = MinMaxScaler(feature_range=(0, 1))
+        self.scaler_Y = MinMaxScaler(feature_range=(0, 1))
+
+        # Scale the feature columns and target column
+        self.X_scaled = self.scaler_X.fit_transform(self.df[features].values)
+        self.Y_scaled = self.scaler_Y.fit_transform(self.df[[self.target_column]].values)
+        print("MLP model preprocessing completed using selected features.")
+
+    def split_data(self):
+        """Splits the preprocessed data into training and testing sets."""
+        train_size = int(len(self.X_scaled) * self.train_size)
+        self.trainX = self.X_scaled[:train_size]
+        self.testX = self.X_scaled[train_size:]
+        self.trainY = self.Y_scaled[:train_size]
+        self.testY = self.Y_scaled[train_size:]
+        # Inverse-transform the target values for later evaluation
+        self.trainY_orig = self.scaler_Y.inverse_transform(self.trainY)
+        self.testY_orig = self.scaler_Y.inverse_transform(self.testY)
+        print(f"MLP model data split into train ({len(self.trainX)}) and test ({len(self.testX)}) sets.")
 
     def create_sequences(self):
-        super().create_sequences(reshape=False)
+        """
+        For the MLP model, we are not using time-series sequences.
+        This method is overridden to simply indicate that no sequence creation is required.
+        """
+        print("MLP model: No sequence creation required for MLP.")
 
     def build_model(self):
         """Builds and compiles the MLP model."""
         self.model = Sequential([
-            Dense(64, input_dim=self.look_back, activation='relu'),
+            Dense(64, input_dim=self.trainX.shape[1], activation='relu'),
             Dropout(0.2),
             Dense(32, activation='relu'),
             Dropout(0.2),
             Dense(1)
         ])
-        
+
         optimizer = RMSprop(learning_rate=0.001)
         self.model.compile(loss='mse', optimizer=optimizer, metrics=['mae'])
         print("MLP model built and compiled.")
@@ -218,10 +259,10 @@ class MLPModel(BaseModel):
         print("MLP model training completed.")
         self.plot_training_history(history)
 
-    def make_predictions(self):
-        """Makes predictions and inverses the scaling."""
-        self.trainPredict = self.scaler.inverse_transform(self.model.predict(self.trainX))
-        self.testPredict = self.scaler.inverse_transform(self.model.predict(self.testX))
+    def make_predictions(self, parameters=[]):
+        """Makes predictions and inverses the scaling for the target variable."""
+        self.trainPredict = self.scaler_Y.inverse_transform(self.model.predict(self.trainX))
+        self.testPredict = self.scaler_Y.inverse_transform(self.model.predict(self.testX))
         print("MLP model predictions made on training and testing data.")
 
     def evaluate_model(self):
@@ -229,11 +270,11 @@ class MLPModel(BaseModel):
         rmse_train = np.sqrt(mean_squared_error(self.trainY_orig, self.trainPredict))
         rmse_test = np.sqrt(mean_squared_error(self.testY_orig, self.testPredict))
         mae = mean_absolute_error(self.testY_orig, self.testPredict)
-        
+
         print(f'MLP Train RMSE: {rmse_train:.2f}')
         print(f'MLP Test RMSE: {rmse_test:.2f}')
         print(f'MLP MAE: {mae:.2f}')
-        
+
         return {'Train RMSE': rmse_train, 'Test RMSE': rmse_test, 'MAE': mae}
 
     def save_model(self):
@@ -242,12 +283,12 @@ class MLPModel(BaseModel):
         print(f"MLP model saved successfully at {self.model_save_path}.")
 
     def plot_predictions(self):
-        """Plots the original vs predicted values for the test set."""
+        """Plots the original vs. predicted values for the test set."""
         plt.figure(figsize=(12,6))
         plt.plot(self.testY_orig, label='Actual')
         plt.plot(self.testPredict, label='Predicted')
-        plt.title('MLP: Actual vs Predicted PTS')
-        plt.xlabel('Time')
+        plt.title('MLP: Actual vs. Predicted PTS')
+        plt.xlabel('Sample')
         plt.ylabel('PTS')
         plt.legend()
         plt.show()
@@ -268,14 +309,15 @@ class MLPModel(BaseModel):
         self.load_data()
         self.preprocess_data()
         self.split_data()
-        self.create_sequences()
+        self.create_sequences()  # No sequences are created for MLP
         self.build_model()
         self.train_model()
-        self.make_predictions()
+        self.make_predictions(self.parameters)
         metrics = self.evaluate_model()
         self.save_model()
         self.plot_predictions()
         return metrics
+
 
 # Example usage
 if __name__ == "__main__":
@@ -304,7 +346,6 @@ if __name__ == "__main__":
     mlp_model = MLPModel(
         file_path=file_path,
         target_column='PTS',
-        look_back=5,
         train_size=0.80,
         epochs=80,  # As per your MLP setup
         batch_size=16,  # As per your MLP setup
