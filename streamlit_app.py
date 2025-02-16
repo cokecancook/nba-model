@@ -5,6 +5,13 @@ from prediction import predict_points_combined
 import get_games as gg
 from teams import TEAMS_DF
 
+def initialize_session_state():
+    if 'selected_player' not in st.session_state:
+        st.session_state.selected_player = None
+    if 'player_name' not in st.session_state:
+        st.session_state.player_name = None
+    if 'current_df' not in st.session_state:
+        st.session_state.current_df = pd.DataFrame()  
 
 # ========== Page Config ========== #
 st.set_page_config(page_title="NBA Points Predictor", layout="wide")
@@ -236,6 +243,9 @@ def prediction():
 
 # ========== Main App ========== #
 def main():
+# Inicializar el estado de la sesión
+    initialize_session_state()
+    
     page = st.sidebar.radio("Select a Page", ["🏀 Introduction", "🔍 EDA", "🔮 Prediction"], key="menu", label_visibility="hidden")
     
     st.sidebar.markdown("""
