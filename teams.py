@@ -18,13 +18,32 @@ TEAMS_DF = pd.DataFrame({
     ],
     'abbreviation': [
         # Current Teams
-        'ATL', 'BOS', 'CLE', 'NOP', 'CHI', 'DAL', 'DEN', 'GSW', 'HOU', 
-        'LAC', 'LAL', 'MIA', 'MIL', 'MIN', 'BKN', 'NYK', 'ORL', 'IND', 'PHI', 
-        'PHX', 'POR', 'SAC', 'SAS', 'OKC', 'TOR', 'UTA', 'MEM', 'WAS', 'DET',
-        'CHA',
+        'ATL', 'BOS', 'CLE', 'NOP', 'CHI', 'DAL', 'DEN', 'GSW', 'HOU', 'LAC',
+        'LAL', 'MIA', 'MIL', 'MIN', 'BKN', 'NYK', 'ORL', 'IND', 'PHI', 'PHX',
+        'POR', 'SAC', 'SAS', 'OKC', 'TOR', 'UTA', 'MEM', 'WAS', 'DET', 'CHA',
         # Historical Teams and Previous Iterations
-        'NJN', 'NOH', 'SEA', 'NOK', 'VAN', 'SDC', 'BUF', 'SDR', 'KC',
-        'CIN', 'BAL', 'STL', 'SYR', 'WSB', 'AND', 'IND', 'DNN', 'PIT',
-        'ROC', 'CHP', 'TRI', 'SHE', 'WAT', 'INO', 'PRO'
-    ]
+        'NJN', 'NOH', 'SEA', 'NOK', 'VAN', 'SDC', 'BUF', 'SDR', 'KC', 'CIN',
+        'BAL', 'STL', 'SYR', 'WSB', 'AND', 'IND', 'DNN', 'PIT', 'ROC', 'CHP',
+        'TRI', 'SHE', 'WAT', 'INO', 'PRO'
+    ],
+    'team_names': [
+        # Current Teams
+        'Atlanta Hawks', 'Boston Celtics', 'Cleveland Cavaliers', 'New Orleans Pelicans', 'Chicago Bulls',
+        'Dallas Mavericks', 'Denver Nuggets', 'Golden State Warriors', 'Houston Rockets', 'Los Angeles Clippers',
+        'Los Angeles Lakers', 'Miami Heat', 'Milwaukee Bucks', 'Minnesota Timberwolves', 'Brooklyn Nets',
+        'New York Knicks', 'Orlando Magic', 'Indiana Pacers', 'Philadelphia 76ers', 'Phoenix Suns',
+        'Portland Trail Blazers', 'Sacramento Kings', 'San Antonio Spurs', 'Oklahoma City Thunder', 'Toronto Raptors',
+        'Utah Jazz', 'Memphis Grizzlies', 'Washington Wizards', 'Detroit Pistons', 'Charlotte Hornets',
+        
+        # Historical Teams and Previous Iterations
+        'New Jersey Nets', 'New Orleans Hornets', 'Seattle SuperSonics', 'New Orleans/Oklahoma City Hornets', 'Vancouver Grizzlies',
+        'San Diego Clippers', 'San Diego Kings', 'San Diego Mavericks', 'Kansas City Kings', 'Cincinnati Royals',
+        'Baltimore Bullets', 'St. Louis Hawks', 'St. Louis Bulls', 'Washington Bullets', 'Washington Capitals',
+        'Indiana Pacers', 'Denver Nuggets', 'Pittsburgh Penguins', 'Rochester Royals', 'Philadelphia Flyers',
+        'Tri-Cities Blackhawks', 'Sheffield Steelers', 'Winnipeg Jets', 'Inonite Hawks', 'Providence Bruins'
+    ]       
 })
+
+if __name__ == "__main__":
+    print(TEAMS_DF)
+
