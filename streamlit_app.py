@@ -87,19 +87,19 @@ def eda():
     
     with col2:
         player1, player2, player3, player4, player5 = st.columns(5)
-        if player1.button("Curry", use_container_width=True):
+        if player1.button("Curry", use_container_width=True, key="curry"):
             update_dataframe('stephen-curry')
             st.session_state.player_name = 'Curry'
-        if player2.button("Giannis", use_container_width=True):
+        if player2.button("Giannis", use_container_width=True, key="giannis"):
             update_dataframe('giannis-antetokounmpo')
             st.session_state.player_name = 'Giannis'
-        if player3.button("Dončić", use_container_width=True):
+        if player3.button("Dončić", use_container_width=True, key="doncic"):
             update_dataframe('luka-dončić')
             st.session_state.player_name = 'Dončić'
-        if player4.button("Tatum", use_container_width=True):
+        if player4.button("Tatum", use_container_width=True, key="tatum"):
             update_dataframe('jayson-tatum')
             st.session_state.player_name = 'Tatum'
-        if player5.button("LeBron", use_container_width=True):
+        if player5.button("LeBron", use_container_width=True, key="lebron"):
             update_dataframe('lebron-james')
             st.session_state.player_name = 'LeBron'
 
@@ -132,7 +132,7 @@ def eda():
     col1, col2, col3 = st.columns([0.21, 7, 0.21])
 
     with col2:
-        st.button("Download latest data (for all 5 players)", on_click=load_dataframes, use_container_width=True)
+        st.button("Download latest data (for all 5 players)", on_click=load_dataframes, key="download", use_container_width=True)
         
 def prediction():
     st.markdown("""
@@ -147,19 +147,19 @@ def prediction():
 
     with col2:
         player1, player2, player3, player4, player5 = st.columns(5)
-        if player1.button("Curry", use_container_width=True):
+        if player1.button("Curry", use_container_width=True, key="curry"):
             update_dataframe('stephen-curry')
             st.session_state.player_name = 'Curry'
-        if player2.button("Giannis", use_container_width=True):
+        if player2.button("Giannis", use_container_width=True, key="giannis"):
             update_dataframe('giannis-antetokounmpo')
             st.session_state.player_name = 'Giannis'
-        if player3.button("Dončić", use_container_width=True):
+        if player3.button("Dončić", use_container_width=True, key="doncic"):
             update_dataframe('luka-dončić')
             st.session_state.player_name = 'Dončić'
-        if player4.button("Tatum", use_container_width=True):
+        if player4.button("Tatum", use_container_width=True, key="tatum"):
             update_dataframe('jayson-tatum')
             st.session_state.player_name = 'Tatum'
-        if player5.button("LeBron", use_container_width=True):
+        if player5.button("LeBron", use_container_width=True, key="lebron"):
             update_dataframe('lebron-james')
             st.session_state.player_name = 'LeBron'
     
@@ -196,7 +196,7 @@ def prediction():
 
 # ========== Main App ========== #
 def main():
-    page = st.sidebar.radio("", ["🏀 Introduction", "🔍 EDA", "🔮 Prediction"])
+    page = st.sidebar.radio("Select a Page", ["🏀 Introduction", "🔍 EDA", "🔮 Prediction"], key="menu", label_visibility="hidden")
     
     st.sidebar.markdown("""
         <div class="sidebar-footer">
