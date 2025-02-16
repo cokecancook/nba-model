@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pandas as pd
 from pandas import DataFrame
+import re
 
 from nba_api.stats.endpoints import playergamelog, teamgamelog, playercareerstats, commonplayerinfo, commonallplayers, commonteamroster, leaguegamefinder, boxscoretraditionalv2
 from nba_api.stats.static import teams
@@ -212,6 +213,13 @@ def get_player_name(id):
 
     # Extract the player's name from the response
     player_name = player_info.get_normalized_dict()['CommonPlayerInfo'][0]['DISPLAY_FIRST_LAST']
+
+    #Replace special characters with their ANSI equivalent
+    player_name = re.sub(r'[čć]', 'c', player_name)
+    player_name = re.sub(r'[đ]', 'd', player_name)
+    player_name = re.sub(r'[š]', 's', player_name)
+    player_name = re.sub(r'[ž]', 'z', player_name)
+
     #player_name = player_name.replace(" ", "-")
     player_name = player_name.replace(" ", "-").lower()
     
