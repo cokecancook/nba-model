@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pickle
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import load_model
 
@@ -46,23 +47,29 @@ def predict_points_mlp(player_key, week_day, rest_days, opponent_id, home):
     """
     # Build file paths based on the selected player
     model_path = f"models/model-mlp-{player_key}.h5"
+    scaler_X_path = model_path.replace('.h5', '_scaler_X.pkl')
+    scaler_Y_path = model_path.replace('.h5', '_scaler_Y.pkl')
 
-    # Load the corresponding MLP model
+    # Load the MLP model
     model = load_model(model_path, compile=False)
     model.compile(loss='mse', optimizer='adam')
-    
+
+    # Load the scalers
+    with open(scaler_X_path, 'rb') as f:
+        scaler_X = pickle.load(f)
+    with open(scaler_Y_path, 'rb') as f:
+        scaler_Y = pickle.load(f)
+
     # Create input array
     input_data = np.array([[week_day, rest_days, opponent_id, home]])
 
-    # Scale the input data
-    scaler_X = MinMaxScaler(feature_range=(0, 1))
-    scaled_input = scaler_X.fit_transform(input_data)
+    # Scale the input data (only transform, don't fit)
+    scaled_input = scaler_X.transform(input_data)
 
     # Make the prediction
     prediction = model.predict(scaled_input)
 
-    # Scale for output
-    scaler_Y = MinMaxScaler(feature_range=(0, 1))
+    # Inverse transform the prediction
     predicted_points = scaler_Y.inverse_transform(prediction)
 
     return predicted_points[0][0]
