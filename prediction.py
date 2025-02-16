@@ -78,13 +78,13 @@ def predict_points_mlp(player_key, week_day, rest_days, opponent_id, home):
     return predicted_pts
 
 
-def predict_points_combined(player_key):
+def predict_points_combined(player_key, week_day, rest_days, opponent_id, home):
     """
     Combines predictions from both LSTM and MLP models.
     Here, we simply average the two predictions.
     """
     lstm_prediction = predict_points_lstm(player_key)
-    mlp_prediction = predict_points_mlp(player_key)
+    mlp_prediction = predict_points_mlp(player_key, week_day, rest_days, opponent_id, home)
 
     # Simple logic: average the two predictions
     combined_prediction = round((lstm_prediction + mlp_prediction) / 2, 2)
