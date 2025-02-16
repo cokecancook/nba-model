@@ -210,7 +210,7 @@ def prediction():
                 # Trigger prediction on button click
                 if st.button("Predict Next Game Points", key="predict", use_container_width=True):
                     predicted_pts = predict_points_combined(player_key, week_day, rest_days, opponent_id, home)
-                    st.success(f"🎯 PPG Prediction: {predicted_pts}")
+                    st.success(f"🎯 PPG Prediction: {predicted_pts:.2f}")
 
     
     
