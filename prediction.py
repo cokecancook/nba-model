@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pickle
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import load_model
 
@@ -35,10 +36,9 @@ def predict_points_lstm(player_key):
     predicted_scaled = model.predict(input_data)
 
     # Inverse the normalization to get the original scale
-    predicted_pts = scaler.inverse_transform(predicted_scaled)[0][0]
-    predicted_pts = round(predicted_pts, 2)
+    predicted_points = scaler.inverse_transform(predicted_scaled)
 
-    return predicted_pts
+    return predicted_points[0][0]
 
 def predict_points_mlp(player_key, week_day, rest_days, opponent_id, home):
     """
@@ -47,35 +47,32 @@ def predict_points_mlp(player_key, week_day, rest_days, opponent_id, home):
     """
     # Build file paths based on the selected player
     model_path = f"models/model-mlp-{player_key}.h5"
-    data_path = f"data/{player_key}.csv"
+    scaler_X_path = model_path.replace('.h5', '_scaler_X.pkl')
+    scaler_Y_path = model_path.replace('.h5', '_scaler_Y.pkl')
 
-    # Load the corresponding MLP model
+    # Load the MLP model
     model = load_model(model_path, compile=False)
     model.compile(loss='mse', optimizer='adam')
 
-    # Load player's historical data for scaling
-    df = pd.read_csv(data_path)
-    
-    # Define feature columns and fit the feature scaler on historical data
-    feature_cols = ['WEEK_DAY', 'REST_DAYS', 'OPPONENT_ID', 'HOME']
-    scaler_X = MinMaxScaler(feature_range=(0, 1))
-    scaler_X.fit(df[feature_cols].values)
+    # Load the scalers
+    with open(scaler_X_path, 'rb') as f:
+        scaler_X = pickle.load(f)
+    with open(scaler_Y_path, 'rb') as f:
+        scaler_Y = pickle.load(f)
 
-    # Prepare the input features from the function arguments and scale them
-    input_features = np.array([[week_day, rest_days, opponent_id, home]])
-    input_features_scaled = scaler_X.transform(input_features)
+    # Create input array
+    input_data = np.array([[week_day, rest_days, opponent_id, home]])
 
-    # Prepare the target scaler for PTS (to invert the scaling after prediction)
-    scaler_Y = MinMaxScaler(feature_range=(0, 1))
-    pts = df['PTS'].values.reshape(-1, 1)
-    scaler_Y.fit(pts)
+    # Scale the input data (only transform, don't fit)
+    scaled_input = scaler_X.transform(input_data)
 
     # Make the prediction
-    predicted_scaled = model.predict(input_features_scaled)
-    predicted_pts = scaler_Y.inverse_transform(predicted_scaled)[0][0]
-    predicted_pts = round(predicted_pts, 2)
+    prediction = model.predict(scaled_input)
 
-    return predicted_pts
+    # Inverse transform the prediction
+    predicted_points = scaler_Y.inverse_transform(prediction)
+
+    return predicted_points[0][0]
 
 
 def predict_points_combined(player_key, week_day, rest_days, opponent_id, home):
@@ -97,6 +94,20 @@ def predict_points_combined(player_key, week_day, rest_days, opponent_id, home):
 
 # Example usage:
 if __name__ == "__main__":
-    player_key = "jayson-tatum"  # Replace with the desired player key
-    final_prediction = predict_points_combined(player_key)
-    print("Final Combined Predicted Points:", final_prediction)
+    # Example parameters
+    player_key = "jayson-tatum"
+    week_day = 2        # Wednesday
+    rest_days = 1       # 1 day of rest
+    opponent_id = 5     # Example opponent team ID
+    home = 1           # Home game
+    
+    # Make the prediction with all required parameters
+    final_prediction = predict_points_combined(
+        player_key=player_key,
+        week_day=week_day,
+        rest_days=rest_days,
+        opponent_id=opponent_id,
+        home=home
+    )
+    
+    print("\nPrediction Complete!")

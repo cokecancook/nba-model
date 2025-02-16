@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pickle
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Dropout, BatchNormalization
 from keras.optimizers import Adam, RMSprop
@@ -224,13 +225,6 @@ class MLPModel(BaseModel):
         self.testY_orig = self.scaler_Y.inverse_transform(self.testY)
         print(f"MLP model data split into train ({len(self.trainX)}) and test ({len(self.testX)}) sets.")
 
-    def create_sequences(self):
-        """
-        For the MLP model, we are not using time-series sequences.
-        This method is overridden to simply indicate that no sequence creation is required.
-        """
-        print("MLP model: No sequence creation required for MLP.")
-
     def build_model(self):
         """Builds and compiles the MLP model."""
         self.model = Sequential([
@@ -278,9 +272,16 @@ class MLPModel(BaseModel):
         return {'Train RMSE': rmse_train, 'Test RMSE': rmse_test, 'MAE': mae}
 
     def save_model(self):
-        """Saves the trained MLP model to the specified path."""
+        """Saves the trained MLP model and scalers."""
         self.model.save(self.model_save_path)
-        print(f"MLP model saved successfully at {self.model_save_path}.")
+
+        # Guardar los scalers con pickle
+        with open(self.model_save_path.replace('.h5', '_scaler_X.pkl'), 'wb') as f:
+            pickle.dump(self.scaler_X, f)
+        with open(self.model_save_path.replace('.h5', '_scaler_Y.pkl'), 'wb') as f:
+            pickle.dump(self.scaler_Y, f)
+        
+        print(f"MLP model and scalers saved successfully at {self.model_save_path}.")
 
     def plot_predictions(self):
         """Plots the original vs. predicted values for the test set."""
@@ -309,7 +310,6 @@ class MLPModel(BaseModel):
         self.load_data()
         self.preprocess_data()
         self.split_data()
-        self.create_sequences()  # No sequences are created for MLP
         self.build_model()
         self.train_model()
         self.make_predictions(self.parameters)
