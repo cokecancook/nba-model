@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from prediction import predict_points
+from prediction import predict_points_combined
 import get_games as gg
 
 # ========== Page Config ========== #
@@ -194,6 +194,8 @@ def prediction():
                 # Obtener el nombre de archivo correspondiente al jugador seleccionado
                 player_key = model_files.get(st.session_state.player_name)
 
+                ['WEEK_DAY', 'REST_DAYS', 'OPPONENT_ID', 'HOME']
+                
                 # Botón para predecir
                 if st.button("Predict Next Game Points", key="predict", use_container_width=True):
                     # Llamar al modelo correcto
