@@ -136,7 +136,10 @@ def eda():
                     height=240,
                 )
     else:
-        st.info("Select a player to explore statistics.")
+        col1w, col2w, col3w = st.columns([0.21, 7, 0.21])
+
+        with col2w:
+            st.info("Select a player to explore statistics.")
     
     col1, col2, col3 = st.columns([0.21, 7, 0.21])
 
@@ -236,7 +239,10 @@ def prediction():
                     predicted_pts = predict_points_combined(player_key, week_day, rest_days, opponent_id, home)
                     st.success(f"🎯 PPG Prediction: {predicted_pts:.2f}")
     else:
-        st.warning("Please select a player to make a prediction.")
+        col1w2, col2w2, col3w2 = st.columns([0.21, 7, 0.21])
+
+        with col2w2:
+            st.warning("Please select a player to make a prediction.")
 
     
     
