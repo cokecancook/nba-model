@@ -242,7 +242,7 @@ def prediction():
         col1w2, col2w2, col3w2 = st.columns([0.21, 7, 0.21])
 
         with col2w2:
-            st.warning("Please select a player to make a prediction.")
+            st.info("Please select a player to make a prediction.")
 
     
     
