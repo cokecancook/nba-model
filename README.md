@@ -4,9 +4,10 @@ Este proyecto utiliza inteligencia artificial para predecir los puntos que un ju
 
 ## 🚀 Características principales
 
-- **Predicción personalizada**: Introduce el nombre del jugador y el equipo rival para obtener la predicción de puntos para ese partido.
-- **Frontend interactivo**: Una interfaz sencilla y accesible gracias a **Streamlit**.
-- **Análisis basado en datos**: Utiliza un archivo CSV con datos históricos de rendimiento de los jugadores.
+- **Predicción personalizada**: Selecciona uno de los cinco jugadores disponibles, el equipo rival, días de descanso, día de la semana y si juegea en casa para obtener la predicción de puntos para ese partido.
+- **Frontend interactivo**: Interfaz sencilla y accesible gracias a **Streamlit**.
+- **Descarga y enriquecimiento de datos**: Descarga actualizada de los partidos de las últimas tres temporadas e exctracción de parámetros.
+- **Análisis basado en datos**: Utiliza los CSV generados con datos históricos de rendimiento de los jugadores.
 
 ---
 
@@ -14,16 +15,22 @@ Este proyecto utiliza inteligencia artificial para predecir los puntos que un ju
 
 ```
 ia_project_2/
+├── .streamlit/
+│   └── config.toml           # Configuración Streamlit
 ├── data/
-│   └── player_stats.csv       # Datos históricos de puntos de los jugadores
+│   └── player-name.csv       # Datos históricos de puntos
 ├── models/
-│   └── trained_model.pkl      # Modelo entrenado para la predicción
-├── app/
-│   └── app.py                 # Código de la aplicación Streamlit
+│   └── model-lstm-player-name.h5   # ModeloLSTM
+│   └── model-mlp-player-name.h5    # ModeloMLP
+├── functions.py               # Funciones de descarga y extracción
+├── get_games.py               # Pipeline de descarga de datos
+├── model-hybrid.py            # Modelo híbrido LSTM y MLP
+├── prediction.py              # Pipeline de predicción híbrida
+├── README.md                  # Descripción del proyecto
 ├── requirements.txt           # Dependencias del proyecto
-├── README.md                  # Documentación del proyecto
-└── notebooks/
-    └── analysis.ipynb         # Exploración y entrenamiento del modelo
+├── streamlit_app.py           # Código de la aplicación Streamlit
+├── style.css                  # Hoja de estilos de Streamlit
+├── teams.py                   # Equipos de la NBA, nombres e IDs.
 ```
 
 ---
@@ -32,23 +39,23 @@ ia_project_2/
 
 El dataset debe contener al menos las siguientes columnas:
 
-- `player_name`: Nombre del jugador.
-- `team_name`: Equipo del jugador.
-- `opponent_team`: Equipo rival.
-- `points`: Puntos anotados en el partido.
-- `game_date`: Fecha del partido.
+- `OPPONENT_ID`: ID del rival.
+- `WEEK_DAY`: Día de la semana.
+- `REST_DAYS`: Días de descanso.
+- `HOME`: Local o visitante.
+- `PPG`: Puntos anotados.
 
 ### Ejemplo de datos:
-| player_name  | team_name  | opponent_team | points | game_date  |
-|--------------|------------|---------------|--------|------------|
-| LeBron James | Lakers     | Warriors      | 30     | 2024-01-01 |
-| Kevin Durant | Suns       | Lakers        | 25     | 2024-01-02 |
+| OPPONENT_ID  | WEEK_DAY | REST_DAYS | HOME | PPG |
+|--------------|----------|-----------|------|-----|
+| 42           | 2        | 1         | 1    | 35 |
+| 37           | 5        | 3         | 0    | 24 |
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
-- **Lenguaje**: Python
+- **Lenguaje**: Python, HTML, CSS
 - **Framework**: Streamlit
 - **Librerías principales**:
   - Pandas
@@ -57,5 +64,12 @@ El dataset debe contener al menos las siguientes columnas:
   - Streamlit (para el frontend)
 
 ---
+
+## 📐 Arquitectura
+
+<img width="1131" alt="streamlit-architecture" src="https://github.com/user-attachments/assets/542f3bfc-b25b-4283-b67d-ef263e6564a4" />
+
+## 🔗 App desplegada
+[Streamlit App]([S](https://nba-predictions-mia.streamlit.app/))
 
 ¡Gracias por visitar el proyecto! 🏀
