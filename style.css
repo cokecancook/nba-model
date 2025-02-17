@@ -412,6 +412,11 @@ canvas {
     color: var(--light) !important;
 }
 
+.stNumberInput,
+.stSelectbox {
+	margin-top: -30px
+}
+
 /* Radio button personalizado */
 div[role="radiogroup"] {
     display: flex;
