@@ -16,21 +16,21 @@ Este proyecto utiliza inteligencia artificial para predecir los puntos que un ju
 ```
 ia_project_2/
 ├── .streamlit/
-│   └── config.toml           # Configuración Streamlit
+│   └── config.toml                 # Configuración Streamlit
 ├── data/
-│   └── player-name.csv       # Datos históricos de puntos
+│   └── player-name.csv             # Datos históricos de puntos
 ├── models/
 │   └── model-lstm-player-name.h5   # ModeloLSTM
 │   └── model-mlp-player-name.h5    # ModeloMLP
-├── functions.py               # Funciones de descarga y extracción
-├── get_games.py               # Pipeline de descarga de datos
-├── model-hybrid.py            # Modelo híbrido LSTM y MLP
-├── prediction.py              # Pipeline de predicción híbrida
-├── README.md                  # Descripción del proyecto
-├── requirements.txt           # Dependencias del proyecto
-├── streamlit_app.py           # Código de la aplicación Streamlit
-├── style.css                  # Hoja de estilos de Streamlit
-├── teams.py                   # Equipos de la NBA, nombres e IDs.
+├── functions.py                    # Funciones de descarga y extracción
+├── get_games.py                    # Pipeline de descarga de datos
+├── model-hybrid.py                 # Modelo híbrido LSTM y MLP
+├── prediction.py                   # Pipeline de predicción híbrida
+├── README.md                       # Descripción del proyecto
+├── requirements.txt                # Dependencias del proyecto
+├── streamlit_app.py                # Código de la aplicación Streamlit
+├── style.css                       # Hoja de estilos de Streamlit
+├── teams.py                        # Equipos de la NBA, nombres e IDs.
 ```
 
 ---
