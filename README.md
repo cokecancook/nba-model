@@ -70,6 +70,6 @@ El dataset debe contener al menos las siguientes columnas:
 <img width="1131" alt="streamlit-architecture" src="https://github.com/user-attachments/assets/542f3bfc-b25b-4283-b67d-ef263e6564a4" />
 
 ## 🔗 App desplegada
-[Streamlit App]([S](https://nba-predictions-mia.streamlit.app/))
+[Streamlit App](https://nba-predictions-mia.streamlit.app/)
 
 ¡Gracias por visitar el proyecto! 🏀
