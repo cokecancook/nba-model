@@ -4,9 +4,9 @@ Este proyecto utiliza inteligencia artificial para predecir los puntos que un ju
 
 ## 🚀 Características principales
 
-- **Predicción personalizada**: Selecciona uno de los cinco jugadores disponibles, el equipo rival, días de descanso, día de la semana y si juegea en casa para obtener la predicción de puntos para ese partido.
+- **Predicción personalizada**: Selecciona uno de los cinco jugadores disponibles, el equipo rival, días de descanso, día de la semana y si juega en casa para obtener la predicción de puntos para ese partido.
 - **Frontend interactivo**: Interfaz sencilla y accesible gracias a **Streamlit**.
-- **Descarga y enriquecimiento de datos**: Descarga actualizada de los partidos de las últimas tres temporadas e exctracción de parámetros.
+- **Descarga y enriquecimiento de datos**: Descarga actualizada de los partidos de las últimas tres temporadas e extracción de parámetros.
 - **Análisis basado en datos**: Utiliza los CSV generados con datos históricos de rendimiento de los jugadores.
 
 ---
