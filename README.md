@@ -1,75 +1,103 @@
-# NBA Points Prediction App
+# 🏀 NBA Performance Model
 
-Este proyecto utiliza inteligencia artificial para predecir los puntos que un jugador de la NBA anotará en un partido específico contra un equipo determinado. La aplicación incluye un frontend interactivo desarrollado con **Streamlit**, que permite a los usuarios seleccionar un jugador, un equipo rival y obtener predicciones basadas en datos históricos.
+A Streamlit app for exploring and predicting NBA player performance using historical data and machine learning.
 
-## 🚀 Características principales
+## 🚀 Main Features
 
-- **Predicción personalizada**: Selecciona uno de los cinco jugadores disponibles, el equipo rival, días de descanso, día de la semana y si juega en casa para obtener la predicción de puntos para ese partido.
-- **Frontend interactivo**: Interfaz sencilla y accesible gracias a **Streamlit**.
-- **Descarga y enriquecimiento de datos**: Descarga actualizada de los partidos de las últimas tres temporadas e extracción de parámetros.
-- **Análisis basado en datos**: Utiliza los CSV generados con datos históricos de rendimiento de los jugadores.
+- **Personalized Prediction:** Select from available players, choose the opponent team, rest days, weekday, and home/away status to get a tailored points prediction for a specific game.
+- **Interactive Frontend:** Simple, accessible interface built with **Streamlit**.
+- **Data Download & Enrichment:** Updated download of games from the last three seasons and extraction of relevant features.
+- **Data-Driven Analysis:** Uses generated CSVs with historical player performance data.
+- **Exploratory Data Analysis (EDA):**
+  - Visualize player stats for the last 10 games.
+  - Line chart of points scored per game (last 100 games).
+  - Explore trends and patterns in player performance.
+- **Machine Learning Predictions:**
+  - (Planned) Predict player points for upcoming games using models trained on historical NBA data (LSTM, MLP, hybrid models).
+- **Caching:**
+  - Fast data loading with Streamlit's caching.
 
 ---
 
-## 📂 Estructura del proyecto
+## 📂 Project Structure
 
 ```
-ia_project_2/
-├── .streamlit/
-│   └── config.toml                 # Configuración Streamlit
+nba-model/
 ├── data/
-│   └── player-name.csv             # Datos históricos de puntos
-├── models/
-│   └── model-lstm-player-name.h5   # ModeloLSTM
-│   └── model-mlp-player-name.h5    # ModeloMLP
-├── functions.py                    # Funciones de descarga y extracción
-├── get_games.py                    # Pipeline de descarga de datos
-├── model-hybrid.py                 # Modelo híbrido LSTM y MLP
-├── prediction.py                   # Pipeline de predicción híbrida
-├── README.md                       # Descripción del proyecto
-├── requirements.txt                # Dependencias del proyecto
-├── streamlit_app.py                # Código de la aplicación Streamlit
-├── style.css                       # Hoja de estilos de Streamlit
-├── teams.py                        # Equipos de la NBA, nombres e IDs.
+│   └── player-name.csv             # Historical player data
+├── README.md                       # Project description
+├── requirements.txt                # Project dependencies
+├── streamlit_app.py                # Streamlit app code
+├── style.css                       # Custom Streamlit styles
 ```
 
 ---
 
 ## 📊 Dataset
 
-El dataset debe contener al menos las siguientes columnas:
+The dataset should contain at least the following columns:
 
-- `OPPONENT_ID`: ID del rival.
-- `WEEK_DAY`: Día de la semana.
-- `REST_DAYS`: Días de descanso.
-- `HOME`: Local o visitante.
-- `PPG`: Puntos anotados.
+- `OPPONENT_ID`: Opponent team ID
+- `WEEK_DAY`: Day of the week
+- `REST_DAYS`: Days of rest
+- `HOME`: Home (1) or Away (0)
+- `PPG`: Points scored
 
-### Ejemplo de datos:
+**Example:**
 | OPPONENT_ID  | WEEK_DAY | REST_DAYS | HOME | PPG |
 |--------------|----------|-----------|------|-----|
-| 42           | 2        | 1         | 1    | 35 |
-| 37           | 5        | 3         | 0    | 24 |
+| 42           | 2        | 1         | 1    | 35  |
+| 37           | 5        | 3         | 0    | 24  |
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Technologies Used
 
-- **Lenguaje**: Python, HTML, CSS
-- **Framework**: Streamlit
-- **Librerías principales**:
+- **Language:** Python, HTML, CSS
+- **Framework:** Streamlit
+- **Main Libraries:**
   - Pandas
-  - Scikit-learn
-  - Matplotlib / Seaborn (para visualización)
-  - Streamlit (para el frontend)
+  - Scikit-learn  
+  - Matplotlib / Seaborn (for visualization)
+  - Streamlit (for frontend)
 
 ---
 
-## 📐 Arquitectura
+## 🚀 How to Run
 
-<img width="1131" alt="streamlit-architecture" src="https://github.com/user-attachments/assets/542f3bfc-b25b-4283-b67d-ef263e6564a4" />
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. **Start the app:**
+   ```bash
+   streamlit run streamlit_app.py
+   ```
+3. **Open in your browser:**
+   Streamlit will provide a local URL (usually [http://localhost:8501](http://localhost:8501)).
 
-## 🔗 App desplegada
+---
+
+## 🕹️ How to Use
+
+- Use the **sidebar** to navigate between:
+  - **🏀 Introduction:** Overview and project description.
+  - **🔍 EDA:** Explore player statistics, trends, and patterns. View the last 10 games and season performance for players (default: LeBron James).
+  - **🔮 Prediction:** Predict future player performance using machine learning models.
+- The app loads data from the `data/` directory (e.g., `data/lebron-james.csv`).
+- Custom CSS provides a modern, NBA-themed interface.
+
+---
+
+## 📐 Architecture
+
+<img width="1131" alt="streamlit-architecture" src="https://github.
+com/user-attachments/assets/542f3bfc-b25b-4283-b67d-ef263e6564a4" />
+
+---
+
+## 🔗 Deployed App
 [Streamlit App](https://nba-predictions-mia.streamlit.app/)
+---
 
-¡Gracias por visitar el proyecto! 🏀
+Feel free to contribute or suggest improvements!
