@@ -13,7 +13,7 @@ A Streamlit app for exploring and predicting NBA player performance using histor
   - Line chart of points scored per game (last 100 games).
   - Explore trends and patterns in player performance.
 - **Machine Learning Predictions:**
-  - (Planned) Predict player points for upcoming games using models trained on historical NBA data (LSTM, MLP, hybrid models).
+  - Predict player points for upcoming games using models trained on historical NBA data (LSTM, MLP, hybrid models).
 - **Caching:**
   - Fast data loading with Streamlit's caching.
 
@@ -24,11 +24,23 @@ A Streamlit app for exploring and predicting NBA player performance using histor
 ```
 nba-model/
 ├── data/
-│   └── player-name.csv             # Historical player data
-├── README.md                       # Project description
-├── requirements.txt                # Project dependencies
-├── streamlit_app.py                # Streamlit app code
-├── style.css                       # Custom Streamlit styles
+│   └── {player}.csv               # Player data
+├── images/                        # Streamlit images
+│   └── architecture.svg           # Architecture diagram
+│   └── logo-nba.svg               # NBA logo
+│   └── nba-stars.svg              # Players picture
+├── models/                        # Trained models
+│   └── model-lstm-{player}.h5     # LSTM model
+│   └── model-mlp-{player}.h5      # MLP model
+├── .gitignore                     # Gitignore
+├── functions.py                   # Preprocessing functions
+├── get_games.py                   # Database generator
+├── model_hybrid.py                # Training pipeline
+├── README.md                      # Project description
+├── requirements.txt               # Project dependencies
+├── streamlit_app.py               # Streamlit app code
+├── style.css                      # Custom Streamlit styles
+├── teams.py                       # List of teams and abbreviations
 ```
 
 ---
@@ -57,7 +69,7 @@ The dataset should contain at least the following columns:
 - **Framework:** Streamlit
 - **Main Libraries:**
   - Pandas
-  - Scikit-learn  
+  - Scikit-learn
   - Matplotlib / Seaborn (for visualization)
   - Streamlit (for frontend)
 
@@ -91,8 +103,7 @@ The dataset should contain at least the following columns:
 
 ## 📐 Architecture
 
-<img width="1131" alt="streamlit-architecture" src="https://github.
-com/user-attachments/assets/542f3bfc-b25b-4283-b67d-ef263e6564a4" />
+<img width="1131" alt="streamlit-architecture" src="https://github.com/user-attachments/assets/542f3bfc-b25b-4283-b67d-ef263e6564a4" />
 
 ---
 
