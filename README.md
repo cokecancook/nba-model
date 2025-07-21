@@ -2,7 +2,7 @@
 
 A Streamlit app for exploring and predicting NBA player performance using historical data and machine learning.
 
-<img width="1391" height="791" alt="Screenshot 2025-07-21 at 02 37 12" src="https://github.com/user-attachments/assets/ad3156a9-1ea9-4593-b509-b3b4cbbb37b3" />
+<img width="1391" height="791" alt="streamlit-screenshot" src="https://github.com/user-attachments/assets/ad3156a9-1ea9-4593-b509-b3b4cbbb37b3" />
 
 ---
 
