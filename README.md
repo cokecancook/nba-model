@@ -112,8 +112,8 @@ The dataset should contain at least the following columns:
 ---
 
 ## 🔗 Deployed App
+
 [Streamlit App](https://nba-predictions-mia.streamlit.app/)
----
 
 ---
 
