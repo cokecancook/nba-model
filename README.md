@@ -115,4 +115,10 @@ The dataset should contain at least the following columns:
 [Streamlit App](https://nba-predictions-mia.streamlit.app/)
 ---
 
-Feel free to contribute or suggest improvements!
+---
+
+## Authors
+
+- [Mauro Balaguer](https://github.com/Maurobalas)
+- [Andreu Picornell](https://github.com/anpiboi)
+- [Coke Stuyck](https://github.com/cokecancook)
